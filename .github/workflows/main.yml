@@ -26,7 +26,7 @@ jobs:
           chmod +x build.sh
           export CFLAGS="-m32"
           export CXXFLAGS="-m32"
-          export LDFLAGS="-m32"
+          export LDFLAGS="-m32 -static -static‑libgcc -static‑libstdc++"
           ./build.sh linux
 
       - name: Find compiled binary
