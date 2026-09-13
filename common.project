@@ -1,6 +1,6 @@
 # perl highlighting
 
-LIBC       = shared
+LIBC       = static
 #MAPFILES   = 1
 CONSOLE    = 1
 
