@@ -1,4 +1,4 @@
-name: Build umodel Linux
+name: Build umodel Linux i386
 on:
   push:
     branches: [ master ]
@@ -6,24 +6,30 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu‑latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Install build dependencies
+      - name: Install 32bit build dependencies
         run: |
-          sudo apt‑get update
-          sudo apt‑get install‑y gcc make libsdl2‑dev zlib1g‑dev libpng‑dev git perl
+          sudo apt-get update
+          sudo apt-get install -y gcc make git perl gcc-multilib
+          sudo apt-get install -y libsdl2-dev:i386 zlib1g-dev:i386 libpng-dev:i386
 
-      
-      - name: Compile
+    
+
+      - name: Compile i386
         run: |
           chmod +x build.sh
-          ./build.sh
+          # 强制gcc生成32位代码，传入CFLAGS
+          export CFLAGS="-m32"
+          export CXXFLAGS="-m32"
+          export LDFLAGS="-m32"
+          ./build.sh linux
 
-      - name: Upload binary
-        uses: actions/upload‑artifact@v4
+      - name: Upload i386 binary
+        uses: actions/upload-artifact@v4
         with:
-          name: umodel‑linux
+          name: umodel-linux-i386
           path: umodel
