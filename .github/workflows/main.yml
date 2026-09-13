@@ -6,27 +6,31 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Enable i386 multiarch
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+
       - name: Install 32bit build dependencies
         run: |
-          sudo apt-get update
           sudo apt-get install -y gcc make git perl gcc-multilib
           sudo apt-get install -y libsdl2-dev:i386 zlib1g-dev:i386 libpng-dev:i386
-
-    
 
       - name: Compile i386
         run: |
           chmod +x build.sh
-          # 强制gcc生成32位代码，传入CFLAGS
           export CFLAGS="-m32"
           export CXXFLAGS="-m32"
           export LDFLAGS="-m32"
           ./build.sh linux
+
+      - name: Verify binary arch
+        run: file umodel
 
       - name: Upload i386 binary
         uses: actions/upload-artifact@v4
