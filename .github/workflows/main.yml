@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Enable i386 multiarch
         run: |
@@ -29,11 +29,14 @@ jobs:
           export LDFLAGS="-m32"
           ./build.sh linux
 
+      - name: Find compiled binary
+        run: find . -name "umodel" -type f
+
       - name: Verify binary arch
         run: file umodel
 
       - name: Upload i386 binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: umodel-linux-i386
           path: umodel
